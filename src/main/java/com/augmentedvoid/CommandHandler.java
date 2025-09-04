@@ -87,6 +87,11 @@ public class CommandHandler implements CommandExecutor {
                     player.sendMessage(Component.text("You have been given a dragon head!", NamedTextColor.GREEN));
                     break;
                     
+                case "give":
+                    player.getInventory().addItem(potionManager.createAugmentedVoidPotion());
+                    player.sendMessage(Component.text("You have been given an Augmented Void potion!", NamedTextColor.GREEN));
+                    break;
+                    
                 default:
                     showHelp(player);
                     break;
@@ -107,5 +112,6 @@ public class CommandHandler implements CommandExecutor {
         player.sendMessage(Component.text("• /userability 1 - Use void ability (affects nearby enemies)", NamedTextColor.AQUA));
         player.sendMessage(Component.text("• /userdrain 1 - Drain effect back into potion", NamedTextColor.AQUA));
         player.sendMessage(Component.text("• /augmentedvoid dragonhead - Get a dragon head", NamedTextColor.AQUA));
+        player.sendMessage(Component.text("• /augmentedvoid give - Get an Augmented Void potion", NamedTextColor.AQUA));
     }
 }

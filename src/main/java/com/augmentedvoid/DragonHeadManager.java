@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -60,6 +61,27 @@ public class DragonHeadManager implements Listener {
                 false,
                 false
             ));
+        }
+    }
+    
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        
+        Player player = (Player) event.getEntity();
+        
+        if (hasAugmentedVoidEffects(player)) {
+            EntityDamageEvent.DamageCause cause = event.getCause();
+            
+            // Cancel fall damage, fire damage, and lava damage
+            if (cause == EntityDamageEvent.DamageCause.FALL ||
+                cause == EntityDamageEvent.DamageCause.FIRE ||
+                cause == EntityDamageEvent.DamageCause.FIRE_TICK ||
+                cause == EntityDamageEvent.DamageCause.LAVA) {
+                event.setCancelled(true);
+            }
         }
     }
     

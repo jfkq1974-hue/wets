@@ -12,6 +12,7 @@ public final class AugmentedVoidPlugin extends JavaPlugin {
     private PotionManager potionManager;
     private DragonHeadManager dragonHeadManager;
     private RecipeManager recipeManager;
+    private VoidWalkingTask voidWalkingTask;
 
     @Override
     public void onEnable() {
@@ -28,9 +29,14 @@ public final class AugmentedVoidPlugin extends JavaPlugin {
         pm.registerEvents(dragonHeadManager, this);
         pm.registerEvents(new PlayerEventListener(dragonHeadManager), this);
         pm.registerEvents(new PotionEventListener(potionManager), this);
+        pm.registerEvents(new EffectHandler(dragonHeadManager), this);
         
         // Register recipes
         recipeManager.registerRecipes();
+        
+        // Start void walking task
+        this.voidWalkingTask = new VoidWalkingTask(this, dragonHeadManager);
+        this.voidWalkingTask.runTaskTimer(this, 0L, 5L); // Run every 5 ticks
         
         // Register commands
         getCommand("augmentedvoid").setExecutor(new CommandHandler(this, potionManager));
@@ -42,6 +48,9 @@ public final class AugmentedVoidPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (voidWalkingTask != null) {
+            voidWalkingTask.cancel();
+        }
         getLogger().info("AugmentedVoid plugin has been disabled!");
     }
 
